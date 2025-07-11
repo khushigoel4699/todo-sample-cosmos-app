@@ -29,3 +29,28 @@ test("Create and delete item test", async ({ page }) => {
 
   await expect(page.locator(`text=${guid}`).first()).toBeHidden()
 });
+
+test("Create and delete item test 2", async ({ page }) => {
+  await page.goto("/", { waitUntil: 'networkidle' });
+
+  const guid = uuidv4();
+  console.log(`Creating item with text: ${guid}`);
+
+  await page.locator('[placeholder="Add an item"]').focus();
+  await page.locator('[placeholder="Add an item"]').type(guid);
+  await page.locator('[placeholder="Add an item"]').press("Enter");
+
+  console.log(`Deleting item with text: ${guid}`);
+  await expect(page.locator(`text=${guid}`).first()).toBeVisible()
+
+  await page.locator(`text=${guid}`).click();
+
+  /* when delete option is hide behind "..." button */
+  const itemMoreDeleteButton = await page.$('button[role="menuitem"]:has-text("")');
+  if(itemMoreDeleteButton){
+    await itemMoreDeleteButton.click();
+  };
+  await page.locator('button[role="menuitem"]:has-text("Delete")').click();
+
+  await expect(page.locator(`text=${guid}`).first()).toBeHidden()
+});

@@ -57,8 +57,7 @@ jobs:
 
     - name: Install Playwright Browsers
       run: |
-        npx playwright install --with-deps chromium
-        npx playwright install-deps
+        npx playwright install
       working-directory: ./tests
 
     - name: Start API server
