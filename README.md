@@ -114,4 +114,4 @@ This template uses [Azure Key Vault](https://docs.microsoft.com/azure/key-vault/
 
 If you have any feature requests, issues, or areas for improvement, please [file an issue](https://aka.ms/azure-dev/issues). To keep up-to-date, ask questions, or share suggestions, join our [GitHub Discussions](https://aka.ms/azure-dev/discussions). You may also contact us via AzDevTeam@microsoft.com.
 
-## Testing githu app
+## Testing github app
