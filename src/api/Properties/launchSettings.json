@@ -14,7 +14,9 @@
       "launchBrowser": false,
       "applicationUrl": "https://localhost:3101;http://localhost:3100",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_COSMOS_ENDPOINT": "https://khgo-cosmosdb-docs.documents.azure.com:443",
+        "AZURE_COSMOS_DATABASE_NAME": "todo"
       }
     },
     "IIS Express": {
