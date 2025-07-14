@@ -1,0 +1,61 @@
+name: E2E Tests (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      web_url:
+        description: 'Web application URL to test against'
+        required: true
+        default: 'http://localhost:3000'
+        type: string
+
+jobs:
+  test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: tests/package-lock.json
+
+    - name: Install test dependencies
+      run: npm ci
+      working-directory: ./tests
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      working-directory: ./tests
+
+    - name: Wait for application to be ready
+      run: |
+        timeout 60 bash -c 'until curl -f ${{ github.event.inputs.web_url }} 2>/dev/null; do sleep 2; done'
+
+    - name: Run Playwright tests
+      run: npx playwright test
+      working-directory: ./tests
+      env:
+        REACT_APP_WEB_BASE_URL: ${{ github.event.inputs.web_url }}
+        CI: true
+
+    - name: Upload Playwright Report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-manual
+        path: tests/playwright-report/
+        retention-days: 30
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: test-results-manual
+        path: tests/test-results/
+        retention-days: 30
